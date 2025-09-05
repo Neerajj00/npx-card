@@ -1,0 +1,23 @@
+{
+  "name": "devratdave",
+  "version": "4.0.0",
+  "description": "",
+  "bin": "./cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.0",
+    "chalk-animation": "^2.0.3",
+    "figlet": "^1.8.2",
+    "gradient-string": "^3.0.0",
+    "inquirer": "^12.9.4",
+    "open": "^10.2.0",
+    "ora": "^8.2.0"
+  }
+}
