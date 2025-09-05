@@ -32,11 +32,7 @@ cd business-card
 npm install
 ```
 
-Next, use the `data.js` to create your configuration. You can also modify the configuration manually if you prefer.
-
-```bash
-npm run generate
-```
+Next, use the `data.js` to modify the configuration manually.
 
 Then, update the `name` field in [`package.json`][package]. I highly recommend that the `name` field matches your primary online username (ex: `devratdave`).
 
