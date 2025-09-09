@@ -25,11 +25,7 @@ async function fadeOut(text, steps = 5, delay = 120) {
   for (let i = 0; i < steps; i++) {
     console.clear();
     console.log(
-      chalk.rgb(
-        Math.floor(255 * opacity),
-        Math.floor(111 * opacity),
-        Math.floor(97 * opacity)
-      )(text)
+      chalk.hex(theme.primary).dim(text) // fade with purple dim
     );
     opacity -= 1 / steps;
     await new Promise((r) => setTimeout(r, delay));
@@ -49,7 +45,7 @@ async function showCard() {
   console.clear();
 
   // 🎬 Intro animations
-  await typewriter(chalk.green("> Booting developer profile..."));
+  await typewriter(chalk.hex(theme.dim)("> Booting developer profile..."));
   const glitch = chalkAnimation.glitch("Loading portfolio...");
   await new Promise((r) => setTimeout(r, 1500));
   glitch.stop();
@@ -62,7 +58,7 @@ async function showCard() {
 
   // Banner + header
   console.log(renderBanner("Neeraj Gupta") + "\n");
-  console.log(gradient(["#00e0ff", "#ff6f61"])("───────  Neeraj Card  ───────") + "\n");
+  console.log(gradient(theme.gradient)("───────  Neeraj Card  ───────") + "\n");
 
   // Card info
   const newline = "\n";
@@ -93,7 +89,7 @@ async function showCard() {
       padding: 1,
       margin: 1,
       borderStyle: "round",
-      borderColor: "cyanBright"
+      borderColor: theme.borderName
     })
   );
 
@@ -101,18 +97,18 @@ async function showCard() {
   await showMenu(true);
 }
 
-// --- Menu only (with optional "first run") ---
+// --- Menu only (loop) ---
 async function showMenu(firstRun = false) {
   const answers = await inquirer.prompt([
     {
       type: "list",
       name: "action",
-      message: "Where would you like to go?",
+      message: chalk.hex(theme.primary)("Where would you like to go?"),
       choices: [
         { name: "🌐 Website", value: "web" },
         { name: "💻 GitHub", value: "github" },
         { name: "🔗 LinkedIn", value: "linkedin" },
-        { name: "💋 Leetcode", value: "leetcode" },
+        { name: "💡 Leetcode", value: "leetcode" },
         { name: "👋 Exit", value: "exit" }
       ]
     }
@@ -126,42 +122,45 @@ async function handleAction(action, firstRun) {
   let spinner;
   switch (action) {
     case "leetcode":
-      spinner = ora("Opening Leetcode...").start();
+      spinner = ora(chalk.hex(theme.leetcode)("Opening Leetcode...")).start();
       await open(data.leetcode);
-      await new Promise((r) => setTimeout(r, 3000));
-      spinner.succeed("Leetcode opened 🚀");
+      await new Promise((r) => setTimeout(r, 2000));
+      spinner.succeed(chalk.hex(theme.leetcode)("Leetcode opened 🚀"));
       console.log("\n");
       break;
+
     case "github":
-      spinner = ora("Opening GitHub...").start();
+      spinner = ora(chalk.hex(theme.github)("Opening GitHub...")).start();
       await open(data.github);
-      await new Promise((r) => setTimeout(r, 3000));
-      spinner.succeed("GitHub opened 🚀");
+      await new Promise((r) => setTimeout(r, 2000));
+      spinner.succeed(chalk.hex(theme.github)("GitHub opened 🚀"));
       console.log("\n");
       break;
+
     case "linkedin":
-      spinner = ora("Opening LinkedIn...").start();
+      spinner = ora(chalk.hex(theme.linkedin)("Opening LinkedIn...")).start();
       await open(data.linkedin);
-      await new Promise((r) => setTimeout(r, 3000));
-      spinner.succeed("LinkedIn opened 🚀");
+      await new Promise((r) => setTimeout(r, 2000));
+      spinner.succeed(chalk.hex(theme.linkedin)("LinkedIn opened 🚀"));
       console.log("\n");
       break;
+
     case "web":
-      spinner = ora("Opening Website...").start();
+      spinner = ora(chalk.hex(theme.gold)("Opening Website...")).start();
       await open(data.web);
-      await new Promise((r) => setTimeout(r, 3000));
-      spinner.succeed("Website opened 🚀");
+      await new Promise((r) => setTimeout(r, 2000));
+      spinner.succeed(chalk.hex(theme.gold)("Website opened 🚀"));
       console.log("\n");
       break;
+
     case "exit":
-      console.log(chalk.green("👋 Thanks for stopping by!"));
-      return; // stop here
+      console.log(chalk.hex(theme.primary)("👋 Thanks for stopping by!"));
+      return; // stop loop
   }
 
-  // 🔁 Loop back, but without banner/card after first run
+  // 🔁 Loop back (menu only, no banner/card after first run)
   await showMenu();
 }
 
 // --- Run ---
 showCard();
-
