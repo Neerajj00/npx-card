@@ -44,36 +44,31 @@ function renderBanner(text) {
   );
 }
 
-// --- Main Card ---
+// --- First run (animations + card + menu) ---
 async function showCard() {
   console.clear();
 
-  // 🎬 Intro
+  // 🎬 Intro animations
   await typewriter(chalk.green("> Booting developer profile..."));
   const glitch = chalkAnimation.glitch("Loading portfolio...");
   await new Promise((r) => setTimeout(r, 1500));
   glitch.stop();
-
-  // 🌀 Fade-out glitch text
   await fadeOut("Loading portfolio...");
 
-  // Welcome message
   const welcomeAnim = chalkAnimation.rainbow("✨ Welcome! Glad to have you here ✨");
   await new Promise((r) => setTimeout(r, 1000));
   welcomeAnim.stop();
   console.log("\n");
 
-  // 🏷️ ASCII Banner
-  console.log(renderBanner("Devrat Dave") + "\n");
+  // Banner + header
+  console.log(renderBanner("Neeraj Gupta") + "\n");
+  console.log(gradient(["#00e0ff", "#ff6f61"])("───────  Neeraj Card  ───────") + "\n");
 
-  // ✨ Elegant gradient header
-  console.log(gradient(["#00e0ff", "#ff6f61"])("───────  Dev Card  ───────") + "\n");
-
-  // 📦 Boxed card
+  // Card info
   const newline = "\n";
   const heading = `${data.name} ${chalk.dim("/")} ${data.handle}`;
   const working = `${chalk.bold("Work:")}     ${data.work}`;
-  const twitter = `${chalk.bold("Twitter:")}  ${data.linksColored.twitter}`;
+  const leetcode = `${chalk.bold("Leetcode:")}  ${data.linksColored.leetcode}`;
   const github = `${chalk.bold("GitHub:")}   ${data.linksColored.github}`;
   const linkedin = `${chalk.bold("LinkedIn:")} ${data.linksColored.linkedin}`;
   const web = `${chalk.bold("Web:")}      ${data.linksColored.web}`;
@@ -84,7 +79,7 @@ async function showCard() {
     heading,
     newline,
     working,
-    twitter,
+    leetcode,
     github,
     linkedin,
     web,
@@ -102,7 +97,12 @@ async function showCard() {
     })
   );
 
-  // 🎯 Interactive menu
+  // then go to menu
+  await showMenu(true);
+}
+
+// --- Menu only (with optional "first run") ---
+async function showMenu(firstRun = false) {
   const answers = await inquirer.prompt([
     {
       type: "list",
@@ -112,44 +112,56 @@ async function showCard() {
         { name: "🌐 Website", value: "web" },
         { name: "💻 GitHub", value: "github" },
         { name: "🔗 LinkedIn", value: "linkedin" },
-        { name: "🐦 Twitter", value: "twitter" },
+        { name: "💋 Leetcode", value: "leetcode" },
         { name: "👋 Exit", value: "exit" }
       ]
     }
   ]);
 
-  await handleAction(answers.action);
+  await handleAction(answers.action, firstRun);
 }
 
-// --- Handle actions with spinner ---
-async function handleAction(action) {
+// --- Handle actions ---
+async function handleAction(action, firstRun) {
   let spinner;
   switch (action) {
-    case "twitter":
-      spinner = ora("Opening Twitter...").start();
-      await open(data.twitter);
-      spinner.succeed("Twitter opened 🚀");
+    case "leetcode":
+      spinner = ora("Opening Leetcode...").start();
+      await open(data.leetcode);
+      await new Promise((r) => setTimeout(r, 3000));
+      spinner.succeed("Leetcode opened 🚀");
+      console.log("\n");
       break;
     case "github":
       spinner = ora("Opening GitHub...").start();
       await open(data.github);
+      await new Promise((r) => setTimeout(r, 3000));
       spinner.succeed("GitHub opened 🚀");
+      console.log("\n");
       break;
     case "linkedin":
       spinner = ora("Opening LinkedIn...").start();
       await open(data.linkedin);
+      await new Promise((r) => setTimeout(r, 3000));
       spinner.succeed("LinkedIn opened 🚀");
+      console.log("\n");
       break;
     case "web":
       spinner = ora("Opening Website...").start();
       await open(data.web);
+      await new Promise((r) => setTimeout(r, 3000));
       spinner.succeed("Website opened 🚀");
+      console.log("\n");
       break;
     case "exit":
       console.log(chalk.green("👋 Thanks for stopping by!"));
-      process.exit(0);
+      return; // stop here
   }
+
+  // 🔁 Loop back, but without banner/card after first run
+  await showMenu();
 }
 
 // --- Run ---
 showCard();
+
